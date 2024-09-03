@@ -10,9 +10,7 @@ pipeline {
         }
         stage('Run') {
             steps {
-                customImage.inside {
-                    sh 'npm start'
-                }
+                sh "docker run -p 3000:3000 node-app:${env.BUILD_ID}"
             }
         }
     }
