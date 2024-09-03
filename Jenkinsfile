@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'docker build -t node:lts-slim .'
+                sh 'docker build --tag node:lts-slim .'
             }
         }
         stage('Run') {
