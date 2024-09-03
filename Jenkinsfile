@@ -1,18 +1,21 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'node:latest'
+            args '-p 3000:3000'
+        }
+    }
 
     stages {
         stage('Build') {
             steps {
                 checkout scm
-                script {
-                    def customImage = docker.build("node-app:${env.BUILD_ID}")
-                }
+                sh 'docker build -t node-app:19 .'
             }
         }
         stage('Run') {
             steps {
-                sh "docker run -p 3000:3000 node-app:${env.BUILD_ID}"
+                sh 'docker run -p 3000:3000 node-app:19'
             }
         }
     }
