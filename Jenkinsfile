@@ -5,7 +5,11 @@ pipeline {
         stage('Build') {
             steps {
                 checkout scm
-                def customImage = docker.build("node-app:${env.BUILD_ID}")
+                steps {
+                    script {
+                        def customImage = docker.build("node-app:${env.BUILD_ID}")
+                    }
+                }
             }
         }
         stage('Run') {
