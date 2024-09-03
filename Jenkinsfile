@@ -1,10 +1,22 @@
-node {
-    checkout scm
+pipeline {
+    agent any
 
-    // Run a Docker container with Docker installed
-    def dockerImage = docker.build("docker:dind")
-    dockerImage.inside {
-        // Run the Docker build command inside the container
-        sh 'docker build -t node:lts-slim ./'
+    stages {
+        stage('Build') {
+            steps {
+                sh 'docker build -t node-app .'
+            }
+        }
+        stage('Run') {
+            steps {
+                sh 'docker run -d -p 3000:3000 node-app'
+            }
+        }
+        stage('Verify') {
+            steps {
+                sh 'sleep 10'
+                sh 'curl http://localhost:3000'
+            }
+        }
     }
 }
