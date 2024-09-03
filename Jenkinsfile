@@ -2,11 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('Build and Run') {
+        stage('Build') {
             steps {
                 checkout scm
-
-                docker.build("my-app:${env.BUILD_ID}").run()
+                def customImage = docker.build("node-app:${env.BUILD_ID}")
+            }
+        }
+        stage('Run') {
+            steps {
+                customImage.inside {
+                    sh 'npm start'
+                }
             }
         }
     }
