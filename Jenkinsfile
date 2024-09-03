@@ -1,9 +1,17 @@
-node {
-    checkout scm
+pipeline {
+    agent any
 
-    def customImage = docker.build("my-image:${env.BUILD_ID}", "./")
+    stages {
+        stage('Build and Run') {
+            steps {
+                checkout scm
 
-    customImage.inside {
-        sh 'npm start'
+                def customImage = docker.build("my-image:${env.BUILD_ID}", "./")
+
+                customImage.inside {
+                    sh 'npm start'
+                }
+            }
+        }
     }
 }
