@@ -1,12 +1,10 @@
 node {
     checkout scm
 
-    def customImage = docker.build("my-image:${env.BUILD_ID}", "./")
-
-    customImage.inside {
-        sh 'npm test'
+    // Run a Docker container with Docker installed
+    def dockerImage = docker.build("docker:dind")
+    dockerImage.inside {
+        // Run the Docker build command inside the container
+        sh 'docker build -t node:lts-slim ./'
     }
-
-    customImage.push()
-    customImage.push('latest')
 }
